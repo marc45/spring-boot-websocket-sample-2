@@ -1,0 +1,32 @@
+def defaultEncoding = 'UTF-8'
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.1.RELEASE")
+  }
+}
+
+jar {
+  baseName = 'spring-boot-websocket-sample'
+  version = '0.0.1-SNAPSHOT'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  //compile('org.springframework.boot:spring-boot-starter')
+  //compile('org.springframework.boot:spring-boot-starter-web')
+  compile('org.springframework.boot:spring-boot-starter-websocket')
+  compile('org.springframework:spring-messaging')
+  testCompile('org.springframework.boot:spring-boot-starter-test')
+  testCompile('junit:junit:4.+')
+}
+

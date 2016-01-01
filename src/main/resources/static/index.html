@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="sockjs-0.3.4.min.js"></script>
+    <script src="stomp.js"></script>
+    <script type="text/javascript">
+        var client = null;
+
+        function connect() {
+            var socket = new SockJS('/endpoint');
+            client = Stomp.over(socket);
+            client.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+                client.subscribe('/dashboard', function(res){
+                    showResult(JSON.parse(res.body).batsu);
+                });
+            });
+            document.getElementById('sendName').disabled = false;
+        }
+
+        function disconnect() {
+            if (client != null) {
+                client.disconnect();
+            }
+            document.getElementById('response').innerHTML = '';
+            document.getElementById('sendName').disabled = true;
+            console.log("Disconnected");
+        }
+
+        function sendName() {
+            var name = document.getElementById('name').value;
+            client.send("/gaki/batsu", {}, JSON.stringify({ 'name': name }));
+        }
+
+        function showResult(message) {
+            var response = document.getElementById('response');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(message));
+            response.appendChild(p);
+        }
+    </script>
+</head>
+<body onload="disconnect()">
+<noscript>
+    <h2 style="color: #ff0000">You must enable JavaScript to use this page.</h2></noscript>
+<div>
+    <div>
+        <button id="connect" onclick="connect();">Connect</button>
+        <button id="disconnect" onclick="disconnect();">Disconnect</button>
+    </div>
+    <hr style="border: 0; border-bottom: 1px dashed #ccc; background: #999;">
+    <div id="forum">
+        <label>Who get batsu?</label><input type="text" id="name" />
+        <button id="sendName" disabled="true" onclick="sendName();">Send</button>
+        <p id="response"></p>
+    </div>
+</div>
+</body>
+</html>

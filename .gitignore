@@ -1,0 +1,10 @@
+*swp
+*class
+
+# gradle
+build
+.gradle
+
+# idea
+.idea/
+*iml
